@@ -1,0 +1,26 @@
+server:
+  port: 8888
+
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/mousseta/spring-petclinic-microservices-config.git
+        native:
+          searchLocations: file:///${GIT_REPO}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  metrics:
+    export:
+      cloudwatch:
+        enabled: true
+        namespace: PetClinicMetrics
+        step: 30s
+  endpoint:
+    health:
+      show-details: always
