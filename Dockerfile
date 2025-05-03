@@ -17,3 +17,4 @@ COPY target/spring-petclinic-config-server-3.0.2.jar app.jar
 
 # Commande d’exécution avec dockerize pour attendre discovery-server
 ENTRYPOINT ["dockerize", "-wait=tcp://discovery-server:8761", "-timeout=60s", "java", "-jar", "app.jar"]
+#test pour le push 
