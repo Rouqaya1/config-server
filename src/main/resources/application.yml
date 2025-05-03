@@ -6,8 +6,12 @@ spring:
     config:
       server:
         git:
+          # L'URL du dépôt Git qui contient les configurations
           uri: https://github.com/mousseta/spring-petclinic-microservices-config.git
+          # Optionnel : si tu as des configurations dans un sous-répertoire du repo Git
+          searchPaths: "config"
         native:
+          # Répertoire local si tu utilises un stockage natif pour les configurations
           searchLocations: file:///${GIT_REPO}
 
 management:
@@ -19,7 +23,7 @@ management:
     export:
       cloudwatch:
         enabled: true
-        namespace: PetClinicMetrics
+        namespace: PetClinicConfigServer
         step: 30s
   endpoint:
     health:
