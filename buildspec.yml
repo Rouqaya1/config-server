@@ -20,14 +20,15 @@ phases:
       - echo "Construction de l'image Docker..."
       - docker build -t $REPOSITORY_NAME:$IMAGE_TAG .
       - docker tag $REPOSITORY_NAME:$IMAGE_TAG $REPOSITORY_URI:$IMAGE_TAG
-      - echo "Image Docker construite et taguée : $REPOSITORY_URI:$IMAGE_TAG"
+      - echo 'Image Docker construite et taguée:$REPOSITORY_URI:$IMAGE_TAG'
 
   post_build:
     commands:
       - echo "Poussée de l'image vers ECR..."
       - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - echo "Image poussée avec succès sur : $REPOSITORY_URI:$IMAGE_TAG"
+      - echo "Image poussée avec succès sur:$REPOSITORY_URI:$IMAGE_TAG"
 
 artifacts:
   files:
     - '**/*'
+
