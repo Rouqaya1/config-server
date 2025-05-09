@@ -9,26 +9,34 @@ env:
     REPOSITORY_URI: 863518447118.dkr.ecr.eu-west-3.amazonaws.com/config-server
 
 phases:
+  install:
+    commands:
+      - echo "Installation de Maven si nécessaire..."
+      - mvn -v
+
   pre_build:
     commands:
       - echo "Authentification auprès de l'ECR..."
       - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
       - echo "Authentification réussie !"
+      - echo "Compilation du projet sans exécuter les tests..."
+      - mvn clean package -DskipTests=true
 
   build:
     commands:
-      - echo "Construction de l'image Docker..."
+      - echo "Exécution des tests..."
+      - mvn test
+      - echo "Tests passés. Construction de l'image Docker..."
       - docker build -t $REPOSITORY_NAME:$IMAGE_TAG .
       - docker tag $REPOSITORY_NAME:$IMAGE_TAG $REPOSITORY_URI:$IMAGE_TAG
-      - echo 'Image Docker construite et taguée:$REPOSITORY_URI:$IMAGE_TAG'
+      - echo "Image Docker construite et taguée :$REPOSITORY_URI:$IMAGE_TAG"
 
   post_build:
     commands:
       - echo "Poussée de l'image vers ECR..."
       - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - echo "Image poussée avec succès sur:$REPOSITORY_URI:$IMAGE_TAG"
+      - echo "Image poussée avec succès sur :$REPOSITORY_URI:$IMAGE_TAG"
 
 artifacts:
   files:
     - '**/*'
-
